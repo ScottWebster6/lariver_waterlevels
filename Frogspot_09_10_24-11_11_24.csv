@@ -1,5 +1,4 @@
-﻿"Plot Title:  Frogspot_22072298"
-"#","Date Time, GMT-07:00","Abs Pres, psi (LGR S/N: 22072298, SEN S/N: 22072298, LBL: Frogspot_Pressure)","Temp, °F (LGR S/N: 22072298, SEN S/N: 22072298, LBL: Frogspot_Temp)","Sensor Depth, meters (LGR S/N: )"
+﻿"#","Date Time, GMT-07:00","Abs Pres, psi (LGR S/N: 22072298, SEN S/N: 22072298, LBL: Frogspot_Pressure)","Temp, °F (LGR S/N: 22072298, SEN S/N: 22072298, LBL: Frogspot_Temp)","Sensor Depth, meters (LGR S/N: )"
 1,09/10/24 05:40:00 PM,14.7553,83.579,0.214
 2,09/10/24 05:45:00 PM,14.7740,83.757,0.228
 3,09/10/24 05:50:00 PM,14.7624,83.757,0.217
