@@ -1,0 +1,61 @@
+# plotly-resampler examples
+
+This directory withholds several examples, highlighting the applicability of plotly-resampler for various use cases.
+
+
+## Prerequisites
+
+To successfully run these examples, make sure that you've installed all the [requirements](requirements.txt) by running:
+```bash
+pip install -r requirements.txt
+```
+
+## 1. Example notebooks
+### 1.1 basic examples
+
+The [basic example notebook](basic_example.ipynb) covers most use-cases in which plotly-resampler will be employed. It serves as an ideal starting point for data-scientists who want to use plotly-resampler in their day-to-day jupyter environments.
+
+Additionally, this notebook also shows some more advanced functionalities, such as:
+* Retaining (a static) plotly-resampler figure in your notebook
+* How to utilize an x-axis overview (i.e., a rangeslider) to navigate through your time series
+* Showing how to style the marker color and size of plotly-resampler figures
+* Adjusting trace data of plotly-resampler figures at runtime
+* How to add (shaded) confidence bounds to your time series
+* The flexibility of configuring different aggregation-algorithms and number of shown samples per trace
+* How plotly-resampler can be used for logarithmic x-axes and an implementation of a logarithmic aggregation algorithm, i.e., [LogLTTB](example_utils/loglttb.py)
+* Using different `fill_value` for gap handling of filled area plots.
+* Using multiple y-axes in a single subplot (see the [other_examples](other_examples.ipynb))
+
+**Note**: the basic example notebook requires `plotly-resampler>=0.9.0rc3`.
+
+### 1.2 Figurewidget example
+
+The [figurewidget example notebook](figurewidget_example.ipynb) utilizes the `FigureWidgetResampler` wrapper to create a `go.FigureWidget` with dynamic aggregation functionality. A major advantage of this approach is that this does not create a web application, avoiding starting an application on a port (and forwarding that port when working remotely).
+
+Additionally, this notebook highlights how to use the `FigureWidget` its on-click callback to utilize plotly for large **time series annotation**.
+
+## 2. Dash apps
+
+The [dash_apps](dash_apps/) folder contains example dash apps in which `plotly-resampler` is integrated
+
+|                                                          | description                                                                                                                                                                                                                                                                         |
+|------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **minimal examples** |                                                                                                                                                                                                                                                                                     |
+| [global variable](dash_apps/01_minimal_global.py) | *bad practice*: minimal example in which a global `FigureResampler` variable is used                                                                                                                                                                                                |
+| [server side caching](dash_apps/02_minimal_cache.py) | *good practice*: minimal example in which we perform server side caching of the `FigureResampler` variable                                                                                                                                                                          |
+| [runtime graph construction](dash_apps/03_minimal_cache_dynamic.py) | minimal example where graphs are constructed based on user interactions at runtime. [Pattern matching callbacks](https://dash.plotly.com/pattern-matching-callbacks) are used construct these plotly-resampler graphs dynamically. Again, server side caching is performed.         |
+| [xaxis overview (rangeslider)](dash_apps/04_minimal_cache_overview.py) | minimal example where a linked xaxis overview is shown below the `FigureResampler` figure. This xaxis rangeslider utilizes [clientside callbacks](https://dash.plotly.com/clientside-callbacks) to realize this behavior. |
+| [xaxis overview (subplots)](dash_apps/05_cache_overview_subplots.py) | example where a linked xaxis overview is shown below the `FigureResampler` figure (with subplots). |
+| [overview range selector button](dash_apps/06_cache_overview_range_buttons.py) | example where (i) a linked xaxis overview is shown below the `FigureResampler` figure, and (ii) a rangeselector along with a reset axis button is utilized to zoom in on specific window sizes. |
+| **advanced apps** |                                                                                                                                                                                                                                                                                     |
+| [dynamic sine generator](dash_apps/11_sine_generator.py) | exponential sine generator which uses [pattern matching callbacks](https://dash.plotly.com/pattern-matching-callbacks) to remove and construct plotly-resampler graphs dynamically                                                                                                  |
+| [file visualization](dash_apps/12_file_selector.py) | load and visualize multiple `.parquet` files with plotly-resampler                                                                                                                                                                                                                  |
+| [dynamic static graph](dash_apps/13_coarse_fine.py) | Visualization dashboard in which a dynamic (i.e., plotly-resampler graph) and a coarse, static graph (i.e., go.Figure) are shown (made for [this issue](https://github.com/predict-idlab/plotly-resampler/issues/56)). Graph interaction events on the coarse graph update the dynamic graph. |
+
+## 3. Other apps
+
+The [other_apps](other_apps/) folder contains examples of `plotly-resampler` being *integrated* in other apps / frameworks
+
+| app-name | description |
+| --- | --- |
+| [streamlit integration](other_apps/streamlit_app.py) | visualize a large noisy sine in a [streamlit](https://streamlit.io/) app |
