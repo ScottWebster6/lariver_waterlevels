@@ -124,3 +124,4 @@ def load_all_data():
     usgs_discharge_df = load_usgs_discharge_df()
     
     return gla_up_df, gla_down_df, frog_df, oros_df, usgs_height_df, usgs_discharge_df
+

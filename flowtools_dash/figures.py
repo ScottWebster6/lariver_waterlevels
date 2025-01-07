@@ -10,6 +10,8 @@ palette = px.colors.qualitative
 colors = palette.Plotly
 
 
+def normalize_data(df, column_name):
+    return (df[column_name] - df[column_name].min()) / (df[column_name].max() - df[column_name].min())
 
 def stage_x_discharge(gla_up_df, gla_down_df, frog_df, oros_df, usgs_height_df, usgs_discharge_df):
         
@@ -66,10 +68,10 @@ def stage_x_discharge(gla_up_df, gla_down_df, frog_df, oros_df, usgs_height_df, 
         x = usgs_discharge_df['Datetime'],
         y = usgs_discharge_df['Flow (cfs)'],
         mode='lines',
-        name = 'Sepulveda Dam Discharge',
-        legendgroup = 'Sepulveda Dam Discharge',
-        opacity=0.8,
-        line=dict(color=colors[5])
+        name = 'Sepulveda Dam Discharge', 
+        legendgroup = 'Sepulveda Dam Discharge', 
+        opacity=0.8, 
+        line=dict(color=colors[5]) 
     )
 
 
@@ -82,7 +84,8 @@ def stage_x_discharge(gla_up_df, gla_down_df, frog_df, oros_df, usgs_height_df, 
         title="LAG Stage and Flow",
         xaxis_title="Date-Time",
         yaxis=dict(title_text="<b>Stage Height</b> (in)", scaleanchor="y2"),
-        yaxis2=dict(title_text="<b>Flow Rate</b> (cfs)", overlaying="y", side="right", matches="y", type='log'),
+        yaxis2=dict(title_text="<b>Flow Rate</b> (cfs)", overlaying="y", side="right", matches="y", 
+                    type='log'),
         autosize=False,
         height=768,
         width=1024,
@@ -199,4 +202,7 @@ def temperature(gla_up_df, gla_down_df, frog_df, oros_df):
 def temperature_wrapper():
     return temperature(dl.load_gla_up_df(), dl.load_gla_down_df(), dl.load_frog_df(), dl.load_oros_df())
 
+
+#stage_x_discharge_graph = stage_x_discharge_wrapper()
+#temperature_graph = temperature_wrapper()
 

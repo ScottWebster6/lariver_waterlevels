@@ -54,7 +54,7 @@ colors = palette.Plotly
 _dash_renderer._set_react_version("18.2.0")
 #setting up Flask server, which allows us to use advanced caching later on for aa webapp
 server = Flask(__name__)
-app = Dash(external_stylesheets=dmc.styles.ALL, server=server)
+app = Dash(external_stylesheets=dmc.styles.ALL, server=server, prevent_initial_callbacks="initial_duplicate" )
 app.config.suppress_callback_exceptions = True 
 init_cache(app)
 
@@ -68,11 +68,12 @@ default_selection = ["LAG Upstream Height",
                     "Sepulveda Discharge"]
 
 
+
 #Define webpage structure here. 
 appcontents = [
     dmc.AppShell(
         children=[
-            #dcc.Store(id="slider_store", storage_type="session", data={}), 
+            dcc.Store(id="original_graph_store", storage_type="memory", data=default_figure), #default graph stored in here without modifications.
             dcc.Store(id={"type": "store", "id": "slider_storage"}, storage_type="session", data={
                 "default_labels": {
                 "day": "Day Offset: 0",
@@ -125,7 +126,7 @@ appcontents = [
                                     zIndex=10,
                                     visible=False
                                     ),
-                                    dcc.Graph(id="displayed_graph", figure=default_figure),
+                                    dcc.Graph(id="displayed_graph", figure=default_figure, width="150%", height="500px"),
                                     
                                 dmc.Select(id= "trace_dropdown", data=default_selection, value=default_selection[0], clearable=False, allowDeselect=False),
                                 dmc.Grid(children=[
@@ -234,5 +235,5 @@ cb.get_callbacks(app)
 #debug=True can be used for logging purposes, but should otherwise be False for performance
 if __name__ == "__main__":
     app.run(
-            debug=True
+            debug=False
 )
