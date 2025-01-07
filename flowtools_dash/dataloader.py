@@ -8,11 +8,11 @@ from datetime import date, datetime, timedelta
 from cache import cache
 
 
-#12/28/2024
+#1/7/2024 Release:
 #For now, data must be inputted from HoboWare to the GitHub repository manually. 
 #A GUI tool to handle this should be made in the future, if time allows. 
 
-#Constants 
+#Constants
 START_DATE = '9-23-2024 19:00:00'
 END_DATE = '12-15-2024 15:10:00'
 TIMEOUT = 300
@@ -77,15 +77,15 @@ def load_frog_df():
     return frog_df
 
 @cache.memoize(timeout=TIMEOUT)
-def load_GLA_up_df():
-    GLA_up_url = 'https://raw.githubusercontent.com/ScottWebster6/lariver_waterlevels/refs/heads/main/GLA_Upstream_levels_22072299_09_23_24-12_15_24.csv'
-    gla_up_df = databyrange(START_DATE, END_DATE, getdata(GLA_up_url))
+def load_gla_up_df():
+    gla_up_url = 'https://raw.githubusercontent.com/ScottWebster6/lariver_waterlevels/refs/heads/main/GLA_Upstream_levels_22072299_09_23_24-12_15_24.csv'
+    gla_up_df = databyrange(START_DATE, END_DATE, getdata(gla_up_url))
     return gla_up_df
 
 @cache.memoize(timeout=TIMEOUT)
 def load_gla_down_df():
-    GLA_down_url = 'https://raw.githubusercontent.com/ScottWebster6/lariver_waterlevels/refs/heads/main/GLA_Downstream_levels_22072297_09_23_24-12_15_24.csv'
-    gla_down_df = databyrange(START_DATE, END_DATE, getdata(GLA_down_url))
+    gla_down_url = 'https://raw.githubusercontent.com/ScottWebster6/lariver_waterlevels/refs/heads/main/GLA_Downstream_levels_22072297_09_23_24-12_15_24.csv'
+    gla_down_df = databyrange(START_DATE, END_DATE, getdata(gla_down_url))
     return gla_down_df
 
 @cache.memoize(timeout=TIMEOUT)
@@ -113,38 +113,14 @@ def load_usgs_discharge_df():
 #Usage:
 #gla_up_df, gla_down_df, frog_df, oros_df, usgs_height_df, usgs_discharge_df = dataloader.load_all_data()
 #Python is weird, but most pythonic abstractions are fairly useful. 
-@cache.memoize(timeout=TIMEOUT)
+#(don't need to cache this function because it contains caching functions!)
 def load_all_data():
-    #removed first line of each .csv to properly format it
-    frog_url = 'https://raw.githubusercontent.com/ScottWebster6/lariver_waterlevels/refs/heads/main/Frogspot_levels_22072298_09_10_24-12_15_24_merged.csv'
-    GLA_down_url = 'https://raw.githubusercontent.com/ScottWebster6/lariver_waterlevels/refs/heads/main/GLA_Downstream_levels_22072297_09_23_24-12_15_24.csv'
-    GLA_up_url = 'https://raw.githubusercontent.com/ScottWebster6/lariver_waterlevels/refs/heads/main/GLA_Upstream_levels_22072299_09_23_24-12_15_24.csv'
-    oros_url = 'https://raw.githubusercontent.com/ScottWebster6/lariver_waterlevels/refs/heads/main/oros_levels_compensated_22072300_09_10_24-12_15_24.csv'
-    usgs_height_url = 'https://raw.githubusercontent.com/ScottWebster6/lariver_waterlevels/refs/heads/main/usgs_sepulveda_stageheight.txt'
-    usgs_discharge_url = 'https://raw.githubusercontent.com/ScottWebster6/lariver_waterlevels/refs/heads/main/usgs_sepulveda_discharge.txt'
-    '''
-    frog & oros start on 9/10/2024 at 16:40:00 and 17:40:00 respectively
-    GLA_up and GLA_down both start on 9/23/2024 @ 19:00:00
-    first collection on 11/11/2024 took place at GLA_up, at 14:55:00
-
     
-    '''
-
-    frog_df = databyrange(START_DATE, END_DATE, getdata(frog_url))
-    gla_down_df = databyrange(START_DATE, END_DATE, getdata(GLA_down_url))
-    gla_up_df = databyrange(START_DATE, END_DATE, getdata(GLA_up_url))
-    oros_df = databyrange(START_DATE, END_DATE, getdata(oros_url))
-    usgs_height_df = databyrange(START_DATE, END_DATE, getusgsdata(usgs_height_url, 'Height (feet)'))
-    usgs_discharge_df = databyrange(START_DATE, END_DATE, getusgsdata(usgs_discharge_url, 'Flow (cfs)'))
-
-
-    #one frogspot reading is erroneous (Nov 1st, @ 17:45, somehow negative?)
-    bad_index = frog_df[frog_df['Datetime'] == datetime(2024, 11, 1, 17, 45)].index[0]
-    frog_df.at[bad_index, 'Height (in)'] = (frog_df.at[bad_index-1, 'Height (in)'] + frog_df.at[bad_index+1, 'Height (in)'])/2
-
-    #converting usgs data
-    usgs_height_df['Height (feet)'] = usgs_height_df['Height (feet)'] * 12 #feet -> inches
-    usgs_height_df.columns = ['Datetime', 'Height (in)']
-        
+    gla_up_df = load_gla_up_df()
+    gla_down_df = load_gla_down_df()
+    frog_df = load_frog_df()
+    oros_df = load_oros_df()
+    usgs_height_df = load_usgs_height_df()
+    usgs_discharge_df = load_usgs_discharge_df()
+    
     return gla_up_df, gla_down_df, frog_df, oros_df, usgs_height_df, usgs_discharge_df
-

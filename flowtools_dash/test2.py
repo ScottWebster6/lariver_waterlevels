@@ -16,7 +16,7 @@ layout = dmc.AppShell(
         dmc.AppShellHeader(
             dmc.Group(
                 [
-                    dmc.Burger(id="burger", size="sm", hiddenFrom="sm", opened=False),
+                    dmc.Burger(id="burger", opened=False),
                     dmc.Image(src=logo, h=40),
                     dmc.Title("Demo App", c="blue"),
                 ],
@@ -59,7 +59,9 @@ app.layout = dmc.MantineProvider(layout)
     State("appshell", "navbar"),
 )
 def navbar_is_open(opened, navbar):
-    navbar["collapsed"] = {"mobile": not opened}
+    navbar["collapsed"] = {"mobile": not opened,
+                           "desktop": not opened}
+    
     return navbar
 
 
